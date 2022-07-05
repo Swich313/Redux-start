@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import {createStore} from 'redux';
+import {createStore, bindActionCreators} from 'redux';
 
 import reducer from "./reducer";
-import {inc, dec, rnd} from "./actions";
+import * as actions from "./actions";
 
 const store = createStore(reducer);
 
@@ -15,22 +15,21 @@ const update = () => {
 
 subscribe(update);
 
-const bindActionCreator = (creator, dispatch) => (...args) => {
-    dispatch(creator(...args));
-}
+// const bindActionCreator = (creator, dispatch) => (...args) => {
+//     dispatch(creator(...args));
+// }
 
-const incDispatch = bindActionCreator(inc, dispatch);
-const decDispatch = bindActionCreator(dec, dispatch);
-const rndDispatch = bindActionCreator(rnd, dispatch);
+const {inc, dec, rnd} = bindActionCreators(actions, dispatch);
 
 
-document.getElementById('inc').addEventListener('click', incDispatch)
 
-document.getElementById('dec').addEventListener('click', decDispatch)
+document.getElementById('inc').addEventListener('click', inc)
+
+document.getElementById('dec').addEventListener('click', dec)
 
 document.getElementById('rnd').addEventListener('click', ()=> {
     const value  = Math.floor(Math.random() * 10);
-    rndDispatch(value)
+    rnd(value)
 })
 
 
